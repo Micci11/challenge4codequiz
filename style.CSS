@@ -16,7 +16,13 @@ body {
   .hide {
     display: none;
   }
-  
+
+
+  .timer {
+    float: right;
+    padding-right: 2%;
+  }
+
   #start-button {
     background-color: #4100aa;
     border: none;
