@@ -60,3 +60,25 @@ body {
     cursor: pointer;
   }
   
+
+
+
+
+
+
+  #end-screen .timer,
+  #end-screen #question-screen h2 {
+    display: none;
+  }
+  
+  #end-screen form,
+  #end-screen #high-score-display {
+    display: block;
+  }
+cd ~  
+
+
+
+
+
+

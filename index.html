@@ -12,7 +12,6 @@
       <h1>Code Quiz</h1>
     </header>
     <main>
-      
       <p class="timer">Time:<span id="timer"></span></p>
       <section id="start-screen">
         <h2>Welcome to the Code Quiz!</h2>
@@ -20,28 +19,31 @@
         <button id="start-button">Start Quiz</button>
       </section>
       <section id="question-screen" class="hide">
-        
-        <!-- <h2>Question 1 of 5</h2> -->
+        <h2>Question 1 of 5</h2>
         <p id="question"></p>
-        <ul id="answers">
-        
-        </ul>
+        <ul id="answers"></ul>
       </section>
+
       <section id="end-screen" class="hide">
         <h2>Congratulations! You finished the quiz!</h2>
         <p>Your final score is <span id="score"></span>.</p>
         <form>
           <label for="initials">Enter your initials:</label>
-          <input type="text" id="initials" name="initials" maxlength="3">
+          <input type="text" id="initials" name="initials" maxlength="3" />
           <button type="submit" id="submit-score">Submit Score</button>
         </form>
+        <h2>High Score: <span id="high-score-display"></span></h2>
+        <button id="go-back">Go back</button>
+        <div id="highScoresTable"></div>
+        <button id="clear-high-scores">Clear high scores</button>
       </section>
-      <!-- highscore screen -->
-      <section id="high-score" class="hide">
-        <h2>High Score</h2>
-        <ul>random</ul> 
-      </section>
+
+
     </main>
     <script src="script.js"></script>
   </body>
 </html>
+
+
+
+

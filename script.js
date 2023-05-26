@@ -12,22 +12,32 @@ var questions = [
   },
   {
     question: "Arrays in Javascript can be used to store _____",
-    answers: ["numbers and strings", "other arrays", "booleans", "all of the above"],
+    answers: [
+      "numbers and strings",
+      "other arrays",
+      "booleans",
+      "all of the above",
+    ],
     correctAnswer: "All of the above",
   },
   {
-    question: "String values must be enclosed within ___ when being assigned to variables.",
+    question:
+      "String values must be enclosed within ___ when being assigned to variables.",
     answers: ["commas", "curly brackets", "quotes", "parenthesis"],
     correctAnswer: "quotes",
   },
   {
-    question: "A very useful tool used during development and debugging for printing content to the debugger is:",
+    question:
+      "A very useful tool used during development and debugging for printing content to the debugger is:",
     answers: ["JavaScript", "terminal/bash", "for loops", "console.log"],
     correctAnswer: "console.log",
-  }
+  },
 
   // Add more questions here
 ];
+
+
+let highScoresArray = JSON.parse(localStorage.getItem("highScores")) || []
 
 //
 
@@ -36,9 +46,11 @@ let timeLeft = 60;
 let currentQuestionIndex = 0;
 
 startButton.addEventListener("click", function () {
+  document.getElementById("start-screen").classList.add("hide");
   showQuestion(0);
   startTimer();
 });
+
 
 // Timer
 function startTimer() {
@@ -54,36 +66,12 @@ function startTimer() {
     }
   }, 1000);
 }
-// Event Listener
-// var answerButtons = document.querySelectorAll(".answer-button");
-
-// answerButtons.forEach(function(button) {
-//   button.addEventListener("click", function(event) {
-//     var selectedAnswer = event.target.dataset.answer;
-//     var isCorrect = event.target.dataset.correct === "true";
-
-//     if (isCorrect) {
-//       // Increment the current question index and show the next question
-//       currentQuestionIndex++;
-//       showQuestion(currentQuestionIndex);
-//     } else {
-//       // Decrement the timer and show an incorrect message
-//       timeLeft -= 10;
-//       // Show the same question again
-//       showQuestion(currentQuestionIndex);
-//     }
-
-//     if (currentQuestionIndex === questions.length) {
-//       endQuiz();
-//     }
-//   });
-// });
-
 // Show Question
 function showQuestion(questionIndex) {
   var questionScreen = document.getElementById("question-screen");
   var questionText = document.getElementById("question");
   var answerList = document.getElementById("answers");
+  var questionNum = questionIndex + 1; // add this line to get the current question number
 
   var question = questions[questionIndex];
   questionText.textContent = question.question;
@@ -101,29 +89,27 @@ function showQuestion(questionIndex) {
     answerList.appendChild(answerItem);
   });
 
-  //
+  // update the question number in the question screen
+  document.querySelector("#question-screen h2").textContent =
+    "Question " + questionNum + " of 5";
+
   questionScreen.classList.remove("hide");
 }
+
+
+
+
 var highScore = 0;
 
 function checkAnswer(e) {
   console.log(e.target.textContent);
-  //once clicked
-  //  if whatever is clicked is equal to the correctAnswer for this question
-  //    then I would increase score
-  //  else if it's incorrect
-  //    I want to decrease the time that the user has left
-  //
-  //  I want to increase to the next question after checking correct/incorrect
-
-  // highScore = 0;
 
   if (e.target.textContent == questions[currentQuestionIndex].correctAnswer) {
     console.log("correct");
     highScore = highScore + 10;
   } else {
     console.log("incorrect");
-    timeLeft -= 7
+    timeLeft -= 7;
   }
   console.log(highScore);
   currentQuestionIndex++;
@@ -134,13 +120,11 @@ function checkAnswer(e) {
   }
 }
 
-// Defining endQuiz function
+
 function endQuiz() {
-  console.log("string" + highScore);
   var endScreen = document.getElementById("end-screen");
   var questionScreen = document.getElementById("question-screen");
   var score = document.getElementById("score");
-  var initialsInput = document.getElementById("initials");
 
   clearInterval(timer);
 
@@ -148,9 +132,99 @@ function endQuiz() {
   endScreen.classList.remove("hide");
   score.textContent = timeLeft.toString();
 }
-function viewHS() {
-  var highScoreScreen = document.getElementById("high-score");
+
+
+document.getElementById("submit-score").addEventListener("click", function (event) {
+  event.preventDefault(); // Prevent form submission
+
   var endScreen = document.getElementById("end-screen");
-  endScreen.classList.add("hide");
-  highScoreScreen.classList.remove("hide");
+  var highScores = document.getElementById("high-scores");
+  var initialsInput = document.getElementById("initials");
+  var highScoreDisplay = document.getElementById("high-score-display");
+
+  let highScoreInstance = {
+    name: initialsInput.value,
+    score: timeLeft.toString()
+  }
+
+  highScoresArray.push(highScoreInstance)
+
+  // Save the high score
+    localStorage.setItem("highScores", JSON.stringify(highScoresArray));
+
+let table = document.createElement("table");
+let tBody = document.createElement("tbody")
+let headerRow = document.createElement("tr");
+let nameHeader = document.createElement("th");
+let scoreHeader = document.createElement("th");
+nameHeader.textContent = "Name";
+scoreHeader.textContent = "Score";
+
+table.appendChild(tBody);
+tBody.appendChild(headerRow);
+headerRow.appendChild(nameHeader);
+headerRow.appendChild(scoreHeader);
+
+
+for(i=0;i<highScoresArray.length;i++){
+  let row = document.createElement("tr");
+  let nameField = document.createElement("td");
+  nameField.textContent = highScoresArray[i].name;
+  let scoreField = document.createElement("td");
+  scoreField.textContent=highScoresArray[i].score;
+  row.appendChild(nameField);
+  row.appendChild(scoreField);
+  tBody.appendChild(row)
 }
+
+if(document.getElementById("highScoresTable").classList.contains("hide")){
+  document.getElementById("highScoresTable").classList.remove("hide")
+}
+
+document.getElementById("highScoresTable").appendChild(table);
+
+  // highScoreDisplay.textContent = localStorage.getItem("initials") + ": " + localStorage.getItem("highScore");
+
+  // endScreen.classList.add("hide");
+  // highScores.classList.remove("hide");
+});
+
+
+
+
+function goBack() {
+  var endScreen = document.getElementById("end-screen");
+  var startScreen = document.getElementById("start-screen");
+
+  endScreen.classList.add("hide");
+  startScreen.classList.remove("hide");
+
+  timeLeft = 60;
+  currentQuestionIndex = 0;
+}
+
+function clearHighScores() {
+  localStorage.removeItem("highScores");
+  document.getElementById("high-score-display").textContent = "0";
+
+  if(!document.getElementById("highScoresTable").classList.contains("hide")){
+    document.getElementById("highScoresTable").classList.add("hide")
+  }
+}
+
+// Add event listeners for the new buttons
+document.getElementById("go-back").addEventListener("click", goBack);
+document
+  .getElementById("clear-high-scores")
+  .addEventListener("click", clearHighScores);
+
+
+  window.onload = function () {
+    var goBackButton = document.getElementById("go-back");
+    var clearHighScoresButton = document.getElementById("clear-high-scores");
+  
+    if (goBackButton && clearHighScoresButton) {
+      goBackButton.addEventListener("click", goBack);
+      clearHighScoresButton.addEventListener("click", clearHighScores);
+    }
+  };
